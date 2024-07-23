@@ -1,0 +1,4 @@
+name: basic-tools
+tools:
+  - name: Length of a Text
+    file: length.py
