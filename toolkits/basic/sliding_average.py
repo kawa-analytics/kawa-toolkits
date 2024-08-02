@@ -12,7 +12,7 @@ from kywy.client.kawa_decorators import kawa_tool
     outputs={'sliding_average': float},
 )
 def execute(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.sort_values('date')
+    df = df.sort_values(['dimension', 'date'])
     df['sliding_average'] = (df.groupby('dimension')['measure']
                              .rolling(window=10)
                              .mean()
