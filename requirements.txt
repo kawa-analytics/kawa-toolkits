@@ -1,2 +1,2 @@
-kywy
+kywy>=0.18.21
 pandas>=2.2.2
