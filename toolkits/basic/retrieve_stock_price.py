@@ -13,5 +13,9 @@ def execute(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_last_price(stock_symbol):
-    ticker = yf.Ticker(stock_symbol)
-    return ticker.history(period='1d')['Close'].iloc[-1]
+    try:
+        ticker = yf.Ticker(stock_symbol)
+        hist = ticker.history(period='1d')
+        return 0 if hist.empty else hist['Close'].iloc[-1]
+    except Exception as e:
+        return 0
