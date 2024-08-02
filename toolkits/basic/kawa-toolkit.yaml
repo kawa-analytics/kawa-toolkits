@@ -2,3 +2,5 @@ name: basic-tools
 tools:
   - name: Length of a Text
     file: length.py
+  - name: Sliding average
+    file: sliding_average.py
