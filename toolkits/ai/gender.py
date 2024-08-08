@@ -12,8 +12,8 @@ logger = logging.getLogger('script-logger')
     outputs={'gender': str},
 )
 def execute(df: pd.DataFrame) -> pd.DataFrame:
-    logger.info(str(df))
     detector = GenderDetector('us')
     df['gender'] = 'OK'
+    logger.info(str(df))
     return df
 
