@@ -1,0 +1,4 @@
+name: ai-tools
+tools:
+  - name: Guess gender from first name
+    file: gender.py

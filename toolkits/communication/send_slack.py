@@ -12,7 +12,6 @@ def execute(df: pd.DataFrame, channel: str, token: str) -> pd.DataFrame:
     num_rows = len(df)
     table = df.head(20).to_markdown()
     note = f'(Showing 20 rows out of {num_rows})' if num_rows > 20 else ''
-
     send_to_slack(
         channel=channel,
         token=token,
