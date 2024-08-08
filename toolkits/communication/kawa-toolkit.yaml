@@ -1,0 +1,4 @@
+name: communication-tools
+tools:
+  - name: Send a slack message
+    file: send_slack.py

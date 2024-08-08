@@ -1,3 +1,4 @@
-kywy>=0.18.21
-pandas>=2.2.2
-yfinance
+kywy==0.18.26
+pandas==2.2.2
+yfinance==0.2.41
+slack_sdk==3.31.0
