@@ -4,5 +4,3 @@ tools:
     file: length.py
   - name: Sliding average
     file: sliding_average.py
-  - name: Stock Price
-    file: retrieve_stock_price.py
