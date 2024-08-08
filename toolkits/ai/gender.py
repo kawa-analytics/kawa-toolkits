@@ -9,5 +9,6 @@ from kywy.client.kawa_decorators import kawa_tool
 )
 def execute(df: pd.DataFrame) -> pd.DataFrame:
     detector = GenderDetector('us')
-    df['gender'] = df['first_name'].apply(lambda x: detector.guess(x))
+    df['gender'] = df['first_name'].apply(lambda x: '-' + x)
     return df
+
