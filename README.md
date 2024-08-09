@@ -24,7 +24,7 @@ There, you can fill the following values:
 - Branch Name: This is the name of the branch that KAWA will retrieve the scripts from. for example: `main`
 
 
-## 2. Create Toolkits and Tools
+## 2. Create toolkits and tools
 
 In order for KAWA to execute your scripts, you have to declare them as KAWA tools, 
 inside KAWA toolkits.
@@ -32,7 +32,7 @@ inside KAWA toolkits.
 ## 2.a Dependencies
 
 For KAWA to execute your scripts with the correct dependencies, make sure to 
-create a dependencies.txt file at the root of your repository.
+create a `requirements.txt` file at the root of your repository.
 
 You need to add a dependency to the kywy library (https://pypi.org/project/kywy/)
 
@@ -105,16 +105,10 @@ correct type.
 In this example, we declare one output, a string, called: `gender`.
 
 Your returned object must have all the columns of the input dataframe plus the
-new generated columns. (This will let KAWA inject the generated data in the
-original one)
+new generated columns (This will let KAWA inject the generated data in the
+original one).
 
-For outputs, the following types are supported:
-
-- str
-- float
-- bool
-- datetime.date
-- datetime.datetime
+Outputs support the same types as inputs.
 
 
 #### iii. Secrets
@@ -139,3 +133,8 @@ tools:
     file: gender.py
 ```
 
+## 2.c Add tools in your workspace
+
+<p align="center">
+  <img src="readme-assets/register_tools.png">
+</p>
