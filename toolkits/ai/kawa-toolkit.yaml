@@ -2,3 +2,5 @@ name: ai-tools
 tools:
   - name: Guess gender from first name
     file: gender.py
+  - name: Extract the sentiment from some content
+    file: sentiment-analysis.py
