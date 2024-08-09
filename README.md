@@ -8,7 +8,7 @@ In order to connect your KAWA workspace to GitHub, you need to generate a Person
 This can be done from the settings menu of your profile.
 Go to: `developer settings > Tokens (classic)`
 
-To access public repositories, make sure to set this scope: `public_repoAccess`
+To access public repositories, make sure to set this scope: `public_repo`
 
 
 ### 1.b Set up the connection between KAWA and GitHub
@@ -122,6 +122,7 @@ It will be made available in the script as `open_ai_key`.
 
 Kawa Toolkits are yaml files that list tools with a readable display name and the 
 path to the associated scripts.
+The toolkit files must be called: `kawa-toolkit.yaml`. (The name is important)
 
 Here is an example of a valid toolkit. It points to a script called `gender.py`.
 It will be displayed in Kawa Gui with the name *Guess gender from first name*.
