@@ -1,5 +1,4 @@
 name: demo
-description: Those tools are used across the videos and demos published by Kawa
 tools:
   - name: Publish Discounts
     file: update_wayne_website.py

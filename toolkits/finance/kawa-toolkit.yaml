@@ -2,3 +2,5 @@ name: finance-tools
 tools:
   - name: Retrieve stock price
     file: retrieve_stock_price.py
+  - name: Optimize Portfolio
+    file: optimize_portfolio.py
