@@ -5,12 +5,13 @@ from kywy.client.kawa_decorators import kawa_tool
 logger = logging.getLogger('script-logger')
 
 
-@kawa_tool(inputs={'product_name': str, 'discount': float})
+@kawa_tool(
+    inputs={'product_name': str, 'discount': float}
+)
 def main(df: pd.DataFrame) -> pd.DataFrame:
     logger.info('Will publish the following data on the website')
     logger.info(df)
-    df['length'] = df['text'].apply(lambda x: len(x))
-    return df
+    update_website(df)
 
 
 def update_website(df):
