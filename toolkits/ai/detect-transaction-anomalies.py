@@ -52,6 +52,7 @@ def detect_behavioral_anomalies(transactions_for_one_client, threshold=2.8):
 
 def detect_spatial_anomalies(transactions_for_one_client, threshold_in_kilometers=5000):
     group = transactions_for_one_client.copy()
+    group.sort_values(by=['date'], inplace=True)
     group['prev_lat'] = group['location_lat'].shift(1)
     group['prev_long'] = group['location_long'].shift(1)
 
