@@ -14,7 +14,7 @@ logger = logging.getLogger('script-logger')
     inputs={
         'client_id': float,
         'amount': float,
-        'date': datetime.date,
+        'date': datetime.datetime,
         'location_lat': float,
         'location_long': float,
     },
