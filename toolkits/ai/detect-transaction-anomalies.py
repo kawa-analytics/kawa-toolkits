@@ -24,14 +24,14 @@ logger = logging.getLogger('script-logger')
         'is_spatial_anomaly': bool,
     }
 )
-def detect_anomalies(data):
-    for client_id, group in data.groupby('client_id'):
-        print(f'Now working in client={client_id}')
-        data.loc[group.index, 'is_point_anomaly'] = detect_point_anomalies(group)
-        data.loc[group.index, 'is_behavioral_anomaly'] = detect_behavioral_anomalies(group)
-        data.loc[group.index, 'is_spatial_anomaly'] = detect_spatial_anomalies(group)
+def detect_anomalies(df: pd.DataFrame) -> pd.DataFrame:
+    for client_id, group in df.groupby('client_id'):
+        logger.info(f'Now working in client={client_id}')
+        df.loc[group.index, 'is_point_anomaly'] = detect_point_anomalies(group)
+        df.loc[group.index, 'is_behavioral_anomaly'] = detect_behavioral_anomalies(group)
+        df.loc[group.index, 'is_spatial_anomaly'] = detect_spatial_anomalies(group)
 
-    return data
+    return df
 
 
 def detect_point_anomalies(transactions_for_one_client):
