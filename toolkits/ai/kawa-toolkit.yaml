@@ -6,3 +6,5 @@ tools:
     file: sentiment-analysis.py
   - name: Transaction Anomaly Detection
     file: detect-transaction-anomalies.py
+  - name: Client clustering
+    file: client_clustering.py
