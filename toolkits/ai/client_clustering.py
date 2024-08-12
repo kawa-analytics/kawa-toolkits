@@ -19,7 +19,8 @@ logger = logging.getLogger('script-logger')
         'num_transactions': float,
     },
     outputs={
-        'cluster_name': str
+        'cluster_name': str,
+        'cluster_description': str
     },
 )
 def execute(df: pd.DataFrame) -> pd.DataFrame:
