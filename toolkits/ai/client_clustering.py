@@ -39,21 +39,29 @@ def execute(df: pd.DataFrame) -> pd.DataFrame:
     normalized_features = scaler.fit_transform(features)
 
     # Apply KMeans Clustering
-    kmeans = KMeans(n_clusters=4, random_state=42)  # Adjust n_clusters as needed
+    n_clusters = 4
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42)  # Adjust n_clusters as needed
     df['cluster'] = kmeans.fit_predict(normalized_features)
 
     # Calculate cluster centroids
     centroids = kmeans.cluster_centers_
 
-    # Generate unique cluster names based on total transaction amount
-    sorted_centroids = sorted(enumerate(centroids), key=lambda x: x[1][1])  # Sort by total_transaction_amount
-    cluster_names = {
-        idx: f"Cluster {i + 1} - {('High' if i == len(sorted_centroids) - 1 else 'Low')} Total Transaction Amount"
-        for i, (idx, _) in enumerate(sorted_centroids)}
+    # Generate cluster names and descriptions
+    cluster_names = {i: f"Cluster{i + 1}" for i in range(n_clusters)}
+    cluster_descriptions = {}
+    for i, centroid in enumerate(centroids):
+        description = (f"Total: {centroid[1]:.2f}, "
+                       f"Avg: {centroid[0]:.2f}, "
+                       f"Min: {centroid[2]:.2f}, "
+                       f"Max: {centroid[3]:.2f}, "
+                       f"StdDev: {centroid[4]:.2f}, "
+                       f"Transactions: {centroid[5]:.2f}")
+        cluster_descriptions[i] = description
 
     df['cluster_name'] = df['cluster'].map(cluster_names)
+    df['cluster_description'] = df['cluster'].map(cluster_descriptions)
 
     # Generate the output DataFrame with client_id and cluster_name
-    output_df = df[['client_id', 'cluster_name']]
+    output_df = df[['client_id', 'cluster_name', 'cluster_description']]
     logger.info(f'Output df: {output_df}')
     return output_df
