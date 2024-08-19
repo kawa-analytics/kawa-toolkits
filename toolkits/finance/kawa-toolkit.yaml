@@ -4,3 +4,5 @@ tools:
     file: retrieve_stock_price.py
   - name: Optimize Portfolio
     file: optimize_portfolio.py
+  - name: Load Market Data
+    file: load_market_data.py
