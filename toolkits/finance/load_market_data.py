@@ -21,8 +21,8 @@ def execute() -> pd.DataFrame:
             print(f"Failed to retrieve data for {symbol}: {e}")
 
     df = pd.DataFrame({
-        'Stock Symbol': symbols,
-        'Price': prices
+        'stock': symbols,
+        'last_price': prices
     })
 
     return df
