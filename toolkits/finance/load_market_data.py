@@ -3,12 +3,9 @@ import pandas as pd
 from kywy.client.kawa_decorators import kawa_tool
 
 
-@kawa_tool(
-    inputs={},
-    outputs={'stock': str, 'last_price': float},
-)
+@kawa_tool(outputs={'stock': str, 'last_price': float})
 def execute() -> pd.DataFrame:
-    stock_symbols = ['AAPL', 'TSLA', 'MSFT', 'CSCO', 'META', 'AMZN', 'GOOGL', 'NVDA']
+    stock_symbols = ['AAPL', 'TSLA', 'MSFT', 'CSCO', 'META', 'AMZN', 'GOOGL', 'NVDA','F']
     prices = []
     symbols = []
     for symbol in stock_symbols:
