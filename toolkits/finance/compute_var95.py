@@ -14,15 +14,19 @@ logger = logging.getLogger('script-logger')
     outputs={'var95': float},
 )
 def calculate_var_95_last_month(df):
+    # Calculate the date range for the past month
     end_date = datetime.today()
     start_date = end_date - timedelta(days=30)
 
+    # Convert dates to string format required by yfinance
     start_date_str = start_date.strftime('%Y-%m-%d')
     end_date_str = end_date.strftime('%Y-%m-%d')
 
-    stock_list = df['stock'].tolist()
+    # Extract the list of stocks from the DataFrame
+    stock_list = df['stocks'].tolist()
 
-    var_95_df = pd.DataFrame()
+    # Create an empty list to store results
+    results = []
 
     for stock in stock_list:
         # Fetch historical data from Yahoo Finance
@@ -30,6 +34,8 @@ def calculate_var_95_last_month(df):
 
         # Calculate daily returns
         stock_data['Return'] = stock_data['Adj Close'].pct_change()
+
+        # Drop NaN values from returns
         stock_data = stock_data.dropna(subset=['Return'])
 
         # Calculate the 95th percentile (VaR 95) of daily returns
@@ -38,6 +44,10 @@ def calculate_var_95_last_month(df):
         else:
             var_95 = np.nan
 
-        var_95_df = var_95_df.append({'stock': stock, 'var95': var_95}, ignore_index=True)
+        # Append the results to the list
+        results.append({'Stock': stock, 'VaR_95': var_95})
+
+    # Convert results list to DataFrame
+    var_95_df = pd.DataFrame(results)
 
     return var_95_df
