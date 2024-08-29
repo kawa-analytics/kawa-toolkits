@@ -6,3 +6,5 @@ tools:
     file: optimize_portfolio.py
   - name: Load Market Data
     file: load_market_data.py
+  - name: Compute VaR 95
+    file: compute_var95.py
