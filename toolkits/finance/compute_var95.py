@@ -23,7 +23,7 @@ def calculate_var_95_last_month(df):
     end_date_str = end_date.strftime('%Y-%m-%d')
 
     # Extract the list of stocks from the DataFrame
-    stock_list = df['stocks'].tolist()
+    stock_list = df['stock'].tolist()
 
     # Create an empty list to store results
     results = []
@@ -45,7 +45,7 @@ def calculate_var_95_last_month(df):
             var_95 = np.nan
 
         # Append the results to the list
-        results.append({'Stock': stock, 'VaR_95': var_95})
+        results.append({'stock': stock, 'var95': var_95})
 
     # Convert results list to DataFrame
     var_95_df = pd.DataFrame(results)
