@@ -3,6 +3,7 @@ import logging
 
 import pandas as pd
 import numpy as np
+from time import time
 from kywy.client.kawa_decorators import kawa_tool
 from sklearn.ensemble import IsolationForest
 from geopy.distance import geodesic
@@ -26,12 +27,16 @@ logger = logging.getLogger('script-logger')
 )
 def detect_anomalies(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Start the process")
+    start_time = time()
     for client_id, group in df.groupby('client_id'):
         logger.info(f'Now working in client={client_id}')
         df.loc[group.index, 'is_point_anomaly'] = detect_point_anomalies(group)
         df.loc[group.index, 'is_behavioral_anomaly'] = detect_behavioral_anomalies(group)
         df.loc[group.index, 'is_spatial_anomaly'] = detect_spatial_anomalies(group)
-    logger.info("Computation is done")
+
+    end_time = time()
+    seconds_elapsed = end_time - start_time
+    logger.info(f"Computation is done in {seconds_elapsed}s")
     return df
 
 
