@@ -1,53 +1,26 @@
-import pandas as pd
 import numpy as np
-import yfinance as yf
 
 from kywy.client.kawa_decorators import kawa_tool
-from datetime import datetime, timedelta
+from datetime import date
 import logging
 
 logger = logging.getLogger('script-logger')
 
 
 @kawa_tool(
-    inputs={'stock': str},
+    inputs={'stock': str, 'date': date, 'price':float},
     outputs={'var95': float},
 )
-def calculate_var_95_last_month(df):
-    # Calculate the date range for the past month
-    end_date = datetime.today()
-    start_date = end_date - timedelta(days=30)
+def calculate_var_95(df):
 
-    # Convert dates to string format required by yfinance
-    start_date_str = start_date.strftime('%Y-%m-%d')
-    end_date_str = end_date.strftime('%Y-%m-%d')
+    df = df.sort_values(by='date')
+    df['return'] = df.groupby('stock')['price'].pct_change()
+    df = df.dropna(subset=['return'])
 
-    # Extract the list of stocks from the DataFrame
-    stock_list = df['stock'].tolist()
+    var_95 = df.groupby('stock')['return'].apply(lambda x: np.percentile(x, 5)).reset_index()
+    var_95.columns = ['stock', 'VaR_95']
 
-    # Create an empty list to store results
-    results = []
+    df = df.merge(var_95, on='stock', how='left')
+    df = df.drop(columns=['return'])
 
-    for stock in stock_list:
-        # Fetch historical data from Yahoo Finance
-        stock_data = yf.download(stock, start=start_date_str, end=end_date_str)
-
-        # Calculate daily returns
-        stock_data['Return'] = stock_data['Adj Close'].pct_change()
-
-        # Drop NaN values from returns
-        stock_data = stock_data.dropna(subset=['Return'])
-
-        # Calculate the 95th percentile (VaR 95) of daily returns
-        if not stock_data['Return'].empty:
-            var_95 = np.percentile(stock_data['Return'], 5)
-        else:
-            var_95 = np.nan
-
-        # Append the results to the list
-        results.append({'stock': stock, 'var95': var_95})
-
-    # Convert results list to DataFrame
-    var_95_df = pd.DataFrame(results)
-
-    return var_95_df
+    return df
