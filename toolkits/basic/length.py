@@ -10,7 +10,7 @@ logger = logging.getLogger('script-logger')
     outputs={'length': float},
 )
 def main(df: pd.DataFrame) -> pd.DataFrame:
-    logger.info('Starting the execution')
+    logger.info('Starting the execution now')
     logger.info(df)
     df['length'] = df['text'].apply(lambda x: len(x))
     return df
