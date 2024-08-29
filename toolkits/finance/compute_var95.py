@@ -18,7 +18,7 @@ def calculate_var_95(df):
     df = df.dropna(subset=['return'])
 
     var_95 = df.groupby('stock')['return'].apply(lambda x: np.percentile(x, 5)).reset_index()
-    var_95.columns = ['stock', 'VaR_95']
+    var_95.columns = ['stock', 'var95']
 
     df = df.merge(var_95, on='stock', how='left')
     df = df.drop(columns=['return'])
