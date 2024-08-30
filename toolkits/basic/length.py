@@ -7,7 +7,7 @@ logger = logging.getLogger('script-logger')
 
 @kawa_tool(
     inputs={'text': str},
-    outputs={'length': int},
+    outputs={'length': float},
 )
 def main(df: pd.DataFrame) -> pd.DataFrame:
     logger.info('Starting the execution now')
