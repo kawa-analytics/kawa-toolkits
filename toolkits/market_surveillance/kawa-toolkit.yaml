@@ -2,3 +2,5 @@ name: market-abuse-surveillance
 tools:
   - name: Spoofing Detection
     file: spoofing_detection.py
+  - name: Insider Trade Detection
+    file: insider_trade_detection.py
