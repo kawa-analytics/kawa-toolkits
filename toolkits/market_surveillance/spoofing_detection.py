@@ -42,7 +42,7 @@ def spoofing_detection(df):
             large_orders['order_cancellation_time'] - large_orders['order_date_time']).dt.total_seconds()
 
     # Identify orders that are canceled shortly after being placed (e.g., within 30 seconds)
-    large_orders['Spoof Detected'] = (large_orders['order_status'] == 'Canceled') & (
+    large_orders['spoof_detected'] = (large_orders['order_status'] == 'Canceled') & (
             large_orders['Time Difference'] <= 30)
 
     # Create a result DataFrame with Order ID and Spoof Detected status
