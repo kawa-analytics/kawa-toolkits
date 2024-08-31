@@ -1,0 +1,4 @@
+name: market-abuse-surveillance
+tools:
+  - name: Spoofing Detection
+    file: spoofing_detection.py
