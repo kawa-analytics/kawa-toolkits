@@ -4,3 +4,5 @@ tools:
     file: spoofing_detection.py
   - name: Insider Trade Detection
     file: insider_trade_detection.py
+  - name: Wash Trade Detection
+    file: wash_trade_detection.py
