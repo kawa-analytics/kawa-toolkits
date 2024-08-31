@@ -30,11 +30,11 @@ def wash_trade_detection(df):
         'trade_date'].diff().dt.total_seconds()
 
     # Initialize the wash trade detection column to False
-    wash_trades['Wash Trade Detected'] = False
+    wash_trades['wash_trade_detected'] = False
 
-    # Update the wash trade detection flag for trades that occurred within 5 minutes
+    # Update the wash trade detection flag for trades that occurred within 15 minutes
     wash_trades.loc[
-        (wash_trades['time_difference'] <= 300) & (wash_trades['time_difference'] > 0), 'wash_trade_detected'] = True
+        (wash_trades['time_difference'] <= 900) & (wash_trades['time_difference'] > 0), 'wash_trade_detected'] = True
 
     # Create a result DataFrame with Trade ID and Wash Trade Detected status
     result_df = wash_trades[['trade_id', 'wash_trade_detected']]
