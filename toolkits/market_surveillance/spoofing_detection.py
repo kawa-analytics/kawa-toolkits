@@ -46,7 +46,7 @@ def spoofing_detection(df):
             large_orders['Time Difference'] <= 30)
 
     # Create a result DataFrame with Order ID and Spoof Detected status
-    output = large_orders[['order_id', 'Spoof Detected']]
+    output = large_orders[['order_id', 'spoof_detected']]
 
     logger.info('Spoofing detection is done')
     logger.info(output)
