@@ -32,7 +32,7 @@ def insider_trade_detection(df, kawa):
                     K.col('Instrument').alias('instrument'),
                     K.col('News Date').alias('news_date'),
                   )
-                 .limit(-1))
+                 .limit(-1)).compute()
 
     logger.info(news_data)
 
