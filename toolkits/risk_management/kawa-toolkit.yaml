@@ -4,3 +4,5 @@ tools:
     file: generate_market_data.py
   - name: Generate Position Data
     file: generate_position_data.py
+  - name: Generate PnL Data
+    file: generate_historical_pnl_data.py
