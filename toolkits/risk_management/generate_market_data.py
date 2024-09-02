@@ -1,5 +1,5 @@
 from kywy.client.kawa_decorators import kawa_tool
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import logging
 import pandas as pd
 import numpy as np
@@ -19,7 +19,7 @@ logger = logging.getLogger('script-logger')
     },
 )
 def generate_market_data():
-    dates = pd.date_range(end=datetime.today(), periods=NUM_DAYS).to_pydatetime().tolist()
+    dates = [datetime.today().date() - timedelta(days=i) for i in range(NUM_DAYS)]
     data = []
 
     for stock in STOCK_NAMES:
