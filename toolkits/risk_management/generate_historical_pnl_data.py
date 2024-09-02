@@ -17,7 +17,7 @@ logger = logging.getLogger('script-logger')
         'cumulative-pnl': float,
     },
 )
-def generate_historical_pnl_data(kawa):
+def generate_historical_pnl_data(df, kawa):
     market_data = (kawa
                    .sheet(sheet_name='Market Data')
                    .select(K.cols())
