@@ -17,7 +17,7 @@ logger = logging.getLogger('script-logger')
         'cumulative-pnl': float,
     },
 )
-def generate_historical_pnl_data(df, kawa):
+def generate_historical_pnl_data(kawa):
     market_data = (kawa
                    .sheet(sheet_name='Market Data')
                    .select(K.cols())
@@ -40,13 +40,13 @@ def generate_historical_pnl_data(df, kawa):
         stock_market_data = market_data[market_data['stock'] == stock].copy()
         stock_market_data['price_change'] = stock_market_data['price'].diff()
 
-        stock_market_data['daily_pnl'] = stock_market_data['price_change'] * quantity
-        stock_market_data['daily_pnl'] = stock_market_data['daily_pnl'].fillna(0)
+        stock_market_data['daily-pnl'] = stock_market_data['price_change'] * quantity
+        stock_market_data['daily-pnl'] = stock_market_data['daily-pnl'].fillna(0)
 
-        stock_market_data['cumulative_pnl'] = stock_market_data['daily_pnl'].cumsum()
+        stock_market_data['cumulative-pnl'] = stock_market_data['daily-pnl'].cumsum()
         stock_market_data['trader'] = trader
 
-        pnl_data.append(stock_market_data[['date', 'stock', 'trader', 'daily_pnl', 'cumulative_pnl']])
+        pnl_data.append(stock_market_data[['date', 'stock', 'trader', 'daily-pnl', 'cumulative-pnl']])
 
     pnl_df = pd.concat(pnl_data, ignore_index=True)
 
