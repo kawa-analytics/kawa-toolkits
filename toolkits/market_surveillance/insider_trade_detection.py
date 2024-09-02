@@ -1,9 +1,6 @@
-import datetime
-
-import numpy as np
 from kywy.client.kawa_client import KawaClient as K
 from kywy.client.kawa_decorators import kawa_tool
-from datetime import date, datetime
+from datetime import datetime
 import logging
 import pandas as pd
 
@@ -29,9 +26,9 @@ def insider_trade_detection(df, kawa):
     news_data = (kawa
                  .sheet(sheet_name='News Data')
                  .select(
-                    K.col('Instrument').alias('instrument'),
-                    K.col('News Date').alias('news_date'),
-                  )
+        K.col('Instrument').alias('instrument'),
+        K.col('News Date').alias('news_date'),
+    )
                  .limit(-1)).compute()
 
     logger.info(news_data)

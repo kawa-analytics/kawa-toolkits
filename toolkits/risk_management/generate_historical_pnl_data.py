@@ -1,10 +1,8 @@
 from kywy.client.kawa_decorators import kawa_tool
-from datetime import datetime, date, timedelta
+from datetime import date
 import logging
 import pandas as pd
-import numpy as np
-
-from toolkits.risk_management.risk_management_common import NUM_DAYS, TRADER_NAMES
+from kywy.client.kawa_client import KawaClient as K
 
 logger = logging.getLogger('script-logger')
 
@@ -14,26 +12,42 @@ logger = logging.getLogger('script-logger')
     outputs={
         'date': date,
         'trader': str,
+        'stock': str,
         'daily-pnl': float,
         'cumulative-pnl': float,
     },
 )
-def generate_historical_pnl_data():
-    dates = [datetime.today().date() - timedelta(days=i) for i in range(NUM_DAYS)]
-    data = []
+def generate_historical_pnl_data(kawa):
+    market_data = (kawa
+                   .sheet(sheet_name='Market Data')
+                   .select(K.cols())
+                   .no_limit()
+                   .compute())
 
-    for trader in TRADER_NAMES:
-        pnl = 0
-        for i in range(NUM_DAYS):
-            daily_pnl = np.random.normal(0, 10000)  # Daily PnL with mean 0 and std dev $10k
-            pnl += daily_pnl
-            data.append({
-                'date': dates[i],
-                'trader': trader,
-                'daily-pnl': daily_pnl,
-                'cumulative-pnl': pnl
-            })
+    position_data = (kawa
+                     .sheet(sheet_name='Position Data')
+                     .select(K.cols())
+                     .no_limit()
+                     .compute())
 
-    df = pd.DataFrame(data)
-    logger.info('PnL data was generated, it contains {} rows'.format(df.shape[0]))
-    return df
+    pnl_data = []
+
+    for _, position in position_data.iterrows():
+        stock = position['stock']
+        trader = position['trader']
+        quantity = position['quantity']
+
+        stock_market_data = market_data[market_data['stock'] == stock].copy()
+        stock_market_data['price_change'] = stock_market_data['price'].diff()
+
+        stock_market_data['daily_pnl'] = stock_market_data['price_change'] * quantity
+        stock_market_data['daily_pnl'] = stock_market_data['daily_pnl'].fillna(0)
+
+        stock_market_data['cumulative_pnl'] = stock_market_data['daily_pnl'].cumsum()
+        stock_market_data['trader'] = trader
+
+        pnl_data.append(stock_market_data[['date', 'stock', 'trader', 'daily_pnl', 'cumulative_pnl']])
+
+    pnl_df = pd.concat(pnl_data, ignore_index=True)
+
+    return pnl_df
