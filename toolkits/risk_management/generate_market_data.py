@@ -27,10 +27,10 @@ def generate_market_data():
         volatility = np.random.uniform(0.1, 0.5)  # Random volatility between 10% and 50%
         for i in range(NUM_DAYS):
             data.append({
-                'Date': dates[i],
-                'Stock': stock,
-                'Price': price[i],
-                'Volatility': volatility
+                'date': dates[i],
+                'stock': stock,
+                'price': price[i],
+                'volatility': volatility
             })
 
     df = pd.DataFrame(data)
