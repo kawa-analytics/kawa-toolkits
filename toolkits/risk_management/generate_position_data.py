@@ -2,7 +2,7 @@ from kywy.client.kawa_decorators import kawa_tool
 import logging
 import pandas as pd
 import numpy as np
-
+import yfinance as yf
 from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_NAMES
 
 logger = logging.getLogger('script-logger')
@@ -21,10 +21,19 @@ logger = logging.getLogger('script-logger')
 def generate_position_data():
     data = []
 
+    # Fetch the most recent market prices for each stock directly from Yahoo Finance
+    latest_prices = {}
+    for stock in STOCK_NAMES:
+        stock_data = yf.download(stock, period='1d')
+
+        if not stock_data.empty:
+            latest_prices[stock] = stock_data['Close'].iloc[-1]  # Get the latest closing price
+
     for stock in STOCK_NAMES:
         for trader in TRADER_NAMES:
-            notional = np.random.randint(1e5, 1e7)  # Random notional between $100k and $10M
             quantity = np.random.randint(100, 10000)  # Random quantity between 100 and 10,000 shares
+            price = latest_prices.get(stock, 0)  # Get the latest price for the stock
+            notional = quantity * price  # Calculate notional based on quantity and latest price
             data.append({
                 'stock': stock,
                 'trader': trader,
