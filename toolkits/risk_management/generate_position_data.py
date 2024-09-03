@@ -31,7 +31,7 @@ def generate_position_data():
 
     for stock in STOCK_NAMES:
         for trader in TRADER_NAMES:
-            quantity = np.random.randint(100, 10000)  # Random quantity between 100 and 10,000 shares
+            quantity = np.random.randint(-50, 500)  # Random quantity between 100 and 10,000 shares
             price = latest_prices.get(stock, 0)  # Get the latest price for the stock
             notional = quantity * price  # Calculate notional based on quantity and latest price
             data.append({
