@@ -3,6 +3,7 @@ import logging
 import pandas as pd
 import numpy as np
 import yfinance as yf
+import uuid
 from datetime import datetime, timedelta
 from scipy.stats import norm
 from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_NAMES
@@ -26,6 +27,7 @@ In the portfolio sheet:
 @kawa_tool(
     inputs={},
     outputs={
+        'trade_id': str,
         'stock': str,
         'trader': str,
         'option_type': str,
@@ -66,7 +68,9 @@ def generate_position_data():
         # Calculate notional value based on strike price and quantity
         notional_value = strike_price * quantity * 100  # 100 shares per option contract
 
+        trade_id = str(uuid.uuid4())
         positions.append({
+            'trade_id': trade_id,
             'stock': stock,
             'trader': trader,
             'option_type': option_type,
