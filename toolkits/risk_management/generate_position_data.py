@@ -100,7 +100,7 @@ def generate_position_data():
             'direction': direction,
             'notional': notional_value,
             'trade_date': trade_date.date(),
-            'initial_premium': initial_premium
+            'initial_premium': initial_premium['premium']
         })
 
     position_data = pd.DataFrame(positions)
