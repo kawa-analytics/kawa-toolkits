@@ -38,20 +38,20 @@ def generate_intraday_risk_data(df, kawa):
     pnl_results = []
     position_data = df
 
+    # D market and greeks data
+    intraday_market_data = fetch_real_time_price_and_volatility()
+    intraday_risk_data = compute_premiums_and_greeks_on_date(
+        position_data=position_data,
+        market_data=intraday_market_data,
+        target_date=today,
+    )
+
     for _, position in position_data.iterrows():
         # Load position fields
         r = 0.01
         stock = position['stock']
         quantity = position['quantity']
         trade_id = position['trade_id']
-
-        # D market and greeks data
-        intraday_market_data = fetch_real_time_price_and_volatility()
-        intraday_risk_data = compute_premiums_and_greeks_on_date(
-            position_data=position_data,
-            market_data=intraday_market_data,
-            target_date=today,
-        )
 
         current_market_data_row = intraday_market_data[intraday_market_data['stock'] == stock]
         current_greeks_row = intraday_risk_data[intraday_risk_data['trade_id'] == trade_id]
