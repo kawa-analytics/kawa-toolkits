@@ -120,4 +120,9 @@ def generate_intraday_risk_data(df, kawa):
                 'price D': curr_price,
             })
 
-    return pd.DataFrame(pnl_results)
+    pnl_df = pd.DataFrame(pnl_results)
+    df_with_pnl = pd.merge(df, pnl_df, on='trade_id', how='left')
+
+    return df_with_pnl
+
+
