@@ -6,7 +6,8 @@ import yfinance as yf
 import uuid
 from datetime import datetime, timedelta, date
 from scipy.stats import norm
-from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_NAMES
+from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_NAMES, \
+    calculate_option_premium_and_greeks
 
 logger = logging.getLogger('script-logger')
 
@@ -36,6 +37,8 @@ In the portfolio sheet:
         'quantity': float,
         'direction': str,
         'notional': float,
+        'trade_date': date,
+        'initial_premium': float,
     },
 )
 def generate_position_data():
@@ -51,6 +54,7 @@ def generate_position_data():
     option_types = ['put', 'put']
     directions = ['long', 'long', 'long']
     risk_free_rate = 0.01  # Example risk-free interest rate (1%)
+    volatility = 0.2
     positions = []
     num_positions = 300
     for _ in range(num_positions):
@@ -68,6 +72,21 @@ def generate_position_data():
         # Calculate notional value based on strike price and quantity
         notional_value = strike_price * quantity * 100  # 100 shares per option contract
 
+        # Generate a random trade date at least one year ago
+        start_date = datetime.today() - timedelta(days=365 * 3)
+        trade_date = start_date + timedelta(days=np.random.randint(0, 365))
+
+        # Calculate initial premium using Black-Scholes model
+        T_trade = (expiration_date - trade_date.date()).days / 365  # Time to expiration from trade date in years
+        initial_premium = calculate_option_premium_and_greeks(
+            S=stock_price,
+            K=strike_price,
+            T=T_trade,
+            r=risk_free_rate,
+            sigma=volatility,
+            option_type=option_type
+        )
+
         trade_id = str(uuid.uuid4())
         positions.append({
             'trade_id': trade_id,
@@ -79,6 +98,8 @@ def generate_position_data():
             'quantity': quantity,
             'direction': direction,
             'notional': notional_value,
+            'trade_date': trade_date.date(),
+            'initial_premium': initial_premium
         })
 
     position_data = pd.DataFrame(positions)
