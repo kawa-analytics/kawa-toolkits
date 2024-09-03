@@ -79,7 +79,6 @@ def generate_historical_risk_data(kawa):
     # Drop unnecessary columns from the merge
     histo_risk_df = histo_risk_df.drop(columns=[col for col in histo_risk_df if col.endswith('_prev')])
 
+    logger.info(histo_risk_df)
+
     return histo_risk_df
-
-
-
