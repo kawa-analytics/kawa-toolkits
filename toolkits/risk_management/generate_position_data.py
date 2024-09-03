@@ -57,6 +57,7 @@ def generate_position_data():
     volatility = 0.2
     positions = []
     num_positions = 300
+
     for _ in range(num_positions):
         trader = np.random.choice(TRADER_NAMES)
         stock = np.random.choice(STOCK_NAMES)
@@ -103,4 +104,5 @@ def generate_position_data():
         })
 
     position_data = pd.DataFrame(positions)
+    logger.info(position_data)
     return position_data
