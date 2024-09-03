@@ -112,7 +112,7 @@ def calculate_option_premium_and_greeks(S, K, T, r, sigma, option_type):
     }
 
 
-def fetch_real_time_price_and_volatility():
+def fetch_real_time_price_and_volatility(price_increase_percent=0, vol_increase_percent=0):
     """
     Fetch the latest closing price and historical volatility for each stock in stock_names.
 
@@ -140,13 +140,22 @@ def fetch_real_time_price_and_volatility():
             # Get the latest closing price
             latest_price = stock_data['Close'].iloc[-1]
 
+            # TR price
+            rt_price = (latest_price
+                        + latest_price * np.random.uniform(-0.01, 0.01)
+                        + latest_price * price_increase_percent / 100)
+
+            rt_vol = (volatility
+                      + volatility * np.random.uniform(-0.01, 0.01)
+                      + volatility * vol_increase_percent / 100)
+
             # Append the data to the list
             data.append({
                 'date': end_date,
                 'stock': stock,
                 # Needs to be improved to generate fake real time data
-                'price': latest_price + latest_price * np.random.uniform(-0.1, 0.1),
-                'volatility': volatility + volatility * np.random.uniform(-0.1, 0.1),
+                'price': rt_price,
+                'volatility': rt_vol,
             })
 
     # Convert the data list to a DataFrame
