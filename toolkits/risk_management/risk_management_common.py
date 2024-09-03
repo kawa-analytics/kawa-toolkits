@@ -136,11 +136,11 @@ def fetch_real_time_price_and_volatility(price_increase_percent=0, vol_increase_
 
             # TR price
             rt_price = (latest_price
-                        + latest_price * 0.005
+                        + latest_price * 0.001
                         + latest_price * price_increase_percent / 100)
 
             rt_vol = (volatility
-                      + latest_price * 0.005
+                      + latest_price * 0.001
                       + volatility * vol_increase_percent / 100)
 
             # Append the data to the list
