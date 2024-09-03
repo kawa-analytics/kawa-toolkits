@@ -31,22 +31,20 @@ def generate_market_data():
 
         # Check if data is fetched successfully
         if not stock_data.empty:
-            stock_data.reset_index(inplace=True)
+            stock_data = stock_data.reset_index()  # Reset index to use 'Date' as a column
             stock_data['stock'] = stock  # Add stock ticker to each row
-            stock_data = stock_data[['Date', 'stock', 'Close']]
-            stock_data.rename(columns={
-                'Date': 'date',
-                'Close': 'price'}, inplace=True)
+
+            # Explicitly create a new DataFrame to avoid SettingWithCopyWarning
+            stock_data = stock_data[['Date', 'stock', 'Close']].copy()
+            stock_data.rename(columns={'Date': 'date', 'Close': 'price'}, inplace=True)
 
             for _, row in stock_data.iterrows():
                 data.append({
                     'date': row['date'].date(),
                     'stock': row['stock'],
                     'price': row['price'],
-                    'volatility': np.random.uniform(0.1, 0.5)
+                    'volatility': np.random.uniform(0.1, 0.5)  # Simulated volatility
                 })
 
     df = pd.DataFrame(data)
-    logger.info('Market data was generated, it contains {} rows'.format(df.shape[0]))
-
     return df

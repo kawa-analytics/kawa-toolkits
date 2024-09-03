@@ -10,6 +10,19 @@ from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_
 logger = logging.getLogger('script-logger')
 
 
+"""
+1) Portfolio = position
+2) Market data
+3) Risk Histo -> premium + greeks
+4) Intraday Risk ->  premium + greeks (computed with current market data) - Introduce variations
+
+In the portfolio sheet:
+1) Computed PnL (premium(intraday) - premium(latest in risk histo))
+2) Risk Based PnL (Black-Scholes model with price and vol)
+
+
+"""
+
 @kawa_tool(
     inputs={},
     outputs={
@@ -59,6 +72,7 @@ def generate_position_data():
         expiration_date = datetime.today() + timedelta(days=int(time_to_expiration * 365))
         quantity = np.random.randint(1, 100)  # Random quantity between 1 and 100 contracts
 
+
         # Calculate the option premium using Black-Scholes model
         premium = calculate_option_premium(
             S=stock_price, K=strike_price, T=time_to_expiration,
@@ -70,6 +84,24 @@ def generate_position_data():
             S=stock_price, K=strike_price, T=time_to_expiration,
             r=risk_free_rate, sigma=implied_volatility, option_type=option_type
         )
+
+
+        # Two types of PnL
+        # Estimated Pnl
+        # Blockly
+        # delta_pnl -> delta (
+        # vega_pnl
+        # gamma_pnl
+        #
+        # -> Pnl estimated = delta_pnl + vega_pnl + gamma_pnl + theta_pnl
+
+
+        # Computed PNl
+        # Delta Premium ->
+
+
+
+
 
         # Calculate notional value based on strike price and quantity
         notional_value = strike_price * quantity * 100  # 100 shares per option contract
@@ -126,17 +158,6 @@ def calculate_greeks(S, K, T, r, sigma, option_type):
 
 
 def calculate_option_premium(S, K, T, r, sigma, option_type):
-    """
-    Calculate the Black-Scholes option premium.
-
-    :param S: Current stock price
-    :param K: Strike price
-    :param T: Time to expiration in years
-    :param r: Risk-free interest rate
-    :param sigma: Volatility of the underlying stock
-    :param option_type: 'call' or 'put'
-    :return: Option premium
-    """
     d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
 
