@@ -75,6 +75,8 @@ def generate_intraday_risk_data(df, kawa):
         quantity = position['quantity']
         trade_id = position['trade_id']
 
+        print(f'$$$ Working on stock={stock} and trade={trade_id}')
+
         current_market_data_row = intraday_market_data[intraday_market_data['stock'] == stock]
         current_greeks_row = intraday_risk_data[intraday_risk_data['trade_id'] == trade_id]
 
@@ -102,6 +104,8 @@ def generate_intraday_risk_data(df, kawa):
             vega_pnl = greeks_hist['vega'] * (curr_vol - hist_vol) * quantity * 100
             theta_pnl = greeks_hist['theta'] * quantity * 100
             rho_pnl = greeks_hist['rho'] * (r - 0.01) * quantity * 100
+
+            print(f'$$$ daily_pnl{daily_pnl}, delta={delta_pnl}')
 
             pnl_results.append({
                 'trade_id': trade_id,
