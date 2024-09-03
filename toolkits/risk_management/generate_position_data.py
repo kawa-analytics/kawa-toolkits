@@ -105,7 +105,7 @@ def generate_position_data():
             'quantity': quantity,
             'direction': direction,
             'notional': notional_value,
-            'trade_date': trade_date.date(),
+            'trade_date': trade_date,
             'initial_premium': initial_premium['premium']
         })
 
