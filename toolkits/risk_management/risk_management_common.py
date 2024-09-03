@@ -113,13 +113,7 @@ def calculate_option_premium_and_greeks(S, K, T, r, sigma, option_type):
 
 
 def fetch_real_time_price_and_volatility(price_increase_percent=0, vol_increase_percent=0):
-    """
-    Fetch the latest closing price and historical volatility for each stock in stock_names.
 
-    :param stock_names: List of stock ticker symbols.
-    :param num_days: Number of days to look back for historical data to calculate volatility.
-    :return: DataFrame with columns ['date', 'stock', 'price', 'volatility'].
-    """
     end_date = datetime.today().date()
     start_date = end_date - timedelta(days=10)
 
@@ -142,11 +136,11 @@ def fetch_real_time_price_and_volatility(price_increase_percent=0, vol_increase_
 
             # TR price
             rt_price = (latest_price
-                        # + latest_price * np.random.uniform(-0.01, 0.01)
+                        + latest_price * 0.005
                         + latest_price * price_increase_percent / 100)
 
             rt_vol = (volatility
-                      # + volatility * np.random.uniform(-0.01, 0.01)
+                      + latest_price * 0.005
                       + volatility * vol_increase_percent / 100)
 
             # Append the data to the list
