@@ -17,6 +17,8 @@ logger = logging.getLogger('script-logger')
         'vol_increase_percent': float,
         'stock': str,
         'strike_price': float,
+        'notional': float,
+        'trader': str,
         'expiration_date': date,
         'quantity': float,
         'direction': str,
