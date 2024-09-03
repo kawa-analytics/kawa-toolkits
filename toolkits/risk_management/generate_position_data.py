@@ -59,7 +59,7 @@ def generate_position_data():
         stock_price = stock_data[stock]['price']
         option_type = np.random.choice(option_types)
         direction = np.random.choice(directions)
-        strike_price = np.round(stock_price * np.random.uniform(0.8, 1.2),
+        strike_price = np.round(stock_price * np.random.uniform(0.5, 0.7),
                                 2)  # Strike price within 20% of current price
         time_to_expiration = np.random.randint(30, 365) / 365  # Time to expiration in years
         expiration_date = (datetime.today() + timedelta(days=int(time_to_expiration * 365))).date()
