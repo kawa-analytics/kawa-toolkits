@@ -25,6 +25,7 @@ logger = logging.getLogger('script-logger')
         'theta': float,
         'rho': float,
         'daily_pnl': float,
+        'realized_pnl': float,
     },
 )
 def generate_historical_risk_data(kawa):
@@ -52,6 +53,14 @@ def generate_historical_risk_data(kawa):
         df = compute_premiums_and_greeks_on_date(position_data, market_data, target_date=d)
         df = df.sort_values(by='trade_id').reset_index(drop=True)
         logger.info(f'Result:  {df}')
+
+        # Calculate realized P&L for each trade
+        df = pd.merge(df, position_data[['trade_id', 'initial_premium', 'quantity', 'direction']], on='trade_id')
+        df['realized_pnl'] = df.apply(
+            lambda row: (row['premium'] - row['initial_premium']) * row['quantity'] * 100
+            if row['direction'] == 'long' else (row['initial_premium'] - row['premium']) * row['quantity'] * 100,
+            axis=1
+        )
 
         if previous_df is not None:
             # Merge current and previous data on trade_id to calculate daily pnl
