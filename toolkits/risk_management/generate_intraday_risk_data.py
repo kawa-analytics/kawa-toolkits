@@ -70,6 +70,7 @@ def generate_intraday_risk_data(df, kawa):
 
     for _, position in position_data.iterrows():
         # Load position fields
+        print(position)
         r = 0.01
         stock = position['stock']
         quantity = position['quantity']
