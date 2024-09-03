@@ -42,7 +42,7 @@ def generate_historical_risk_data(kawa):
 
     unique_dates = market_data[['date']].drop_duplicates()
     unique_dates_sorted = unique_dates.sort_values(by='date', ascending=False)
-    recent_dates = unique_dates_sorted['date'].head(30)
+    recent_dates = unique_dates_sorted['date'].head(200)
     dfs = []
 
     previous_df = None
