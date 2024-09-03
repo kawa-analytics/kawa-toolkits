@@ -48,7 +48,7 @@ def generate_historical_risk_data(kawa):
 
     previous_df = None
     for d in recent_dates_sorted:
-        logger.info(f'Work on {d}')
+        logger.info(f'&&&&&&& Work on {d} &&&&&&&&&')
         df = compute_premiums_and_greeks_on_date(position_data, market_data, target_date=d)
         df = df.sort_values(by='trade_id').reset_index(drop=True)
         logger.info(f'Result:  {df}')
