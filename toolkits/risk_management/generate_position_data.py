@@ -84,11 +84,11 @@ def generate_position_data():
         notional_value = strike_price * quantity * 100  # 100 shares per option contract
 
         # Calculate initial premium using Black-Scholes model
-        T_trade = (expiration_date - trade_date.date()).days / 365  # Time to expiration from trade date in years
+        t_trade = (expiration_date - trade_date).days / 365  # Time to expiration from trade date in years
         initial_premium = calculate_option_premium_and_greeks(
             S=stock_price,
             K=strike_price,
-            T=T_trade,
+            T=t_trade,
             r=risk_free_rate,
             sigma=volatility,
             option_type=option_type
