@@ -142,11 +142,11 @@ def fetch_real_time_price_and_volatility(price_increase_percent=0, vol_increase_
 
             # TR price
             rt_price = (latest_price
-                        + latest_price * np.random.uniform(-0.01, 0.01)
+                        # + latest_price * np.random.uniform(-0.01, 0.01)
                         + latest_price * price_increase_percent / 100)
 
             rt_vol = (volatility
-                      + volatility * np.random.uniform(-0.01, 0.01)
+                      # + volatility * np.random.uniform(-0.01, 0.01)
                       + volatility * vol_increase_percent / 100)
 
             # Append the data to the list
