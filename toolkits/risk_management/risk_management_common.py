@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import yfinance as yf
+from datetime import datetime, timedelta
 from scipy.stats import norm
 
 NUM_STOCKS = 10
@@ -108,3 +110,45 @@ def calculate_option_premium_and_greeks(S, K, T, r, sigma, option_type):
         'theta': theta,
         'rho': rho
     }
+
+
+def fetch_real_time_price_and_volatility():
+    """
+    Fetch the latest closing price and historical volatility for each stock in stock_names.
+
+    :param stock_names: List of stock ticker symbols.
+    :param num_days: Number of days to look back for historical data to calculate volatility.
+    :return: DataFrame with columns ['date', 'stock', 'price', 'volatility'].
+    """
+    end_date = datetime.today().date()
+    start_date = end_date - timedelta(days=10)
+
+    data = []
+
+    for stock in STOCK_NAMES:
+        # Fetch historical market data from Yahoo Finance
+        stock_data = yf.download(stock, start=start_date, end=end_date)
+
+        # Check if data is fetched successfully
+        if not stock_data.empty:
+            # Calculate daily returns
+            stock_data['daily_return'] = stock_data['Close'].pct_change()
+
+            # Calculate historical volatility as the standard deviation of daily returns annualized
+            volatility = stock_data['daily_return'].std() * np.sqrt(252)  # 252 trading days in a year
+
+            # Get the latest closing price
+            latest_price = stock_data['Close'].iloc[-1]
+
+            # Append the data to the list
+            data.append({
+                'date': end_date,
+                'stock': stock,
+                # Needs to be improved to generate fake real time data
+                'price': latest_price + latest_price * np.random.uniform(-0.1, 0.1),
+                'volatility': volatility + volatility * np.random.uniform(-0.1, 0.1),
+            })
+
+    # Convert the data list to a DataFrame
+    df = pd.DataFrame(data)
+    return df

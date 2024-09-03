@@ -8,3 +8,5 @@ tools:
     file: generate_historical_risk_data.py
   - name: Compute Volatility
     file: compute_volatility.py
+  - name: Compute Intraday Risk
+    file: generate_intraday_risk_data.py
