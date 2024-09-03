@@ -1,3 +1,5 @@
+import random
+
 from kywy.client.kawa_decorators import kawa_tool
 import logging
 import pandas as pd
@@ -5,7 +7,6 @@ import numpy as np
 import yfinance as yf
 import uuid
 from datetime import datetime, timedelta, date
-from scipy.stats import norm
 from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_NAMES, \
     calculate_option_premium_and_greeks
 
@@ -43,12 +44,18 @@ In the portfolio sheet:
 )
 def generate_position_data():
     stock_data = {}
+
     for stock in STOCK_NAMES:
         ticker = yf.Ticker(stock)
-        stock_info = ticker.history(period="1d")
-        stock_data[stock] = {
-            'price': stock_info['Close'].iloc[-1]
-        }
+        stock_info = ticker.history(start=date(2022, 10, 4),
+                                    end=date(2022, 10, 5))  # Fetch data for that day
+
+        # Check if data is fetched successfully
+        if not stock_info.empty:
+            stock_data[stock] = {
+                'price': stock_info['Close'].iloc[0],  # Use iloc[0] to get the closing price for the exact day
+                'date': stock_info.index[0].date()  # Store the exact date of the data
+            }
 
     # Define option parameters
     option_types = ['put', 'put', 'call']
@@ -59,12 +66,15 @@ def generate_position_data():
     num_positions = 300
 
     for _ in range(num_positions):
+        # Generate a random trade date at least one year ago
+        trade_date = date(2022, 10, random.randint(1,20))
+
         trader = np.random.choice(TRADER_NAMES)
         stock = np.random.choice(STOCK_NAMES)
         stock_price = stock_data[stock]['price']
         option_type = np.random.choice(option_types)
         direction = np.random.choice(directions)
-        strike_price = np.round(stock_price * np.random.uniform(0.5, 0.7),
+        strike_price = np.round(stock_price * np.random.uniform(0.7, 0.9),
                                 2)  # Strike price within 20% of current price
         time_to_expiration = np.random.randint(30, 365) / 365  # Time to expiration in years
         expiration_date = (datetime.today() + timedelta(days=int(time_to_expiration * 365))).date()
@@ -72,10 +82,6 @@ def generate_position_data():
 
         # Calculate notional value based on strike price and quantity
         notional_value = strike_price * quantity * 100  # 100 shares per option contract
-
-        # Generate a random trade date at least one year ago
-        start_date = datetime.today() - timedelta(days=365 * 3)
-        trade_date = start_date + timedelta(days=np.random.randint(0, 365))
 
         # Calculate initial premium using Black-Scholes model
         T_trade = (expiration_date - trade_date.date()).days / 365  # Time to expiration from trade date in years
@@ -106,3 +112,5 @@ def generate_position_data():
     position_data = pd.DataFrame(positions)
     logger.info(position_data)
     return position_data
+
+
