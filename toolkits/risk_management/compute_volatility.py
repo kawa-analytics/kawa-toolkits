@@ -27,10 +27,10 @@ def generate_market_data(df):
         stock_data['daily_return'] = np.log(stock_data['price'] / stock_data['price'].shift(1))
 
         # Compute the rolling standard deviation of daily returns
-        stock_data['rolling_volatility'] = stock_data['daily_return'].rolling(window=window).std()
+        stock_data['volatility'] = stock_data['daily_return'].rolling(window=window).std()
 
         # Annualize the rolling volatility
-        stock_data['rolling_volatility'] = stock_data['volatility'] * np.sqrt(252)
+        stock_data['volatility'] = stock_data['volatility'] * np.sqrt(252)
 
         # Select relevant columns
         stock_data = stock_data[['date', 'stock', 'volatility']]
