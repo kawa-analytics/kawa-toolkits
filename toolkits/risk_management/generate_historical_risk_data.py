@@ -43,9 +43,14 @@ def generate_historical_risk_data(kawa):
     recent_dates = unique_dates_sorted['date'].head(5)
     dfs = []
     for d in recent_dates:
+        logger.info(f'Work on {d}')
         df = compute_premiums_and_greeks_on_date(position_data, market_data, target_date=d)
+        logger.info(f'Result:  {df}')
         dfs.append(df)
 
     histo_risk_df = pd.concat(dfs, ignore_index=True)
 
     return histo_risk_df
+
+
+
