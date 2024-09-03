@@ -74,8 +74,11 @@ def generate_intraday_risk_data(df, kawa):
         stock = position['stock']
         quantity = position['quantity']
         trade_id = position['trade_id']
+        price_increase_percent = position['price_increase_percent']
+        vol_increase_percent = position['vol_increase_percent']
 
-        print(f'$$$ Working on stock={stock} and trade={trade_id}')
+        print(f'$$$ Working on stock={stock} and trade={trade_id}. '
+              f'Stressed: price={price_increase_percent} vol={vol_increase_percent}')
 
         current_market_data_row = intraday_market_data[intraday_market_data['stock'] == stock]
         current_greeks_row = intraday_risk_data[intraday_risk_data['trade_id'] == trade_id]
@@ -124,5 +127,3 @@ def generate_intraday_risk_data(df, kawa):
     df_with_pnl = pd.merge(df, pnl_df, on='trade_id', how='left')
 
     return df_with_pnl
-
-
