@@ -58,8 +58,8 @@ def generate_position_data():
             }
 
     # Define option parameters
-    option_types = ['put', 'put', 'call']
-    directions = ['long', 'short', 'long']
+    option_types = ['put',  'call']
+    directions = ['long', 'short']
     risk_free_rate = 0.01  # Example risk-free interest rate (1%)
     volatility = 0.2
     positions = []
