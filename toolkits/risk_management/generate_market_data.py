@@ -34,6 +34,10 @@ def generate_market_data():
             stock_data = stock_data.reset_index()  # Reset index to use 'Date' as a column
             stock_data['stock'] = stock  # Add stock ticker to each row
 
+            # Calculate daily returns and historical volatility
+            stock_data['daily_return'] = stock_data['Close'].pct_change()
+            historical_volatility = stock_data['daily_return'].std() * np.sqrt(252)  # Annualized volatility
+
             # Explicitly create a new DataFrame to avoid SettingWithCopyWarning
             stock_data = stock_data[['Date', 'stock', 'Close']].copy()
             stock_data.rename(columns={'Date': 'date', 'Close': 'price'}, inplace=True)
@@ -43,7 +47,7 @@ def generate_market_data():
                     'date': row['date'].date(),
                     'stock': row['stock'],
                     'price': row['price'],
-                    'volatility': np.random.uniform(0.1, 0.5)  # Simulated volatility
+                    'volatility': historical_volatility  # Use computed historical volatility
                 })
 
     df = pd.DataFrame(data)
