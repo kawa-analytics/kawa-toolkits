@@ -2,6 +2,7 @@ from kywy.client.kawa_decorators import kawa_tool
 from datetime import date
 import logging
 import pandas as pd
+import numpy as np
 from kywy.client.kawa_client import KawaClient as K
 
 from toolkits.risk_management.risk_management_common import compute_premiums_and_greeks_on_date
@@ -23,6 +24,7 @@ logger = logging.getLogger('script-logger')
         'vega': float,
         'theta': float,
         'rho': float,
+        'daily_pnl': float,
     },
 )
 def generate_historical_risk_data(kawa):
@@ -40,17 +42,34 @@ def generate_historical_risk_data(kawa):
 
     unique_dates = market_data[['date']].drop_duplicates()
     unique_dates_sorted = unique_dates.sort_values(by='date', ascending=False)
-    recent_dates = unique_dates_sorted['date'].head(5)
+    recent_dates = unique_dates_sorted['date'].head(30)
     dfs = []
+
+    previous_df = None
     for d in recent_dates:
         logger.info(f'Work on {d}')
         df = compute_premiums_and_greeks_on_date(position_data, market_data, target_date=d)
         logger.info(f'Result:  {df}')
-        dfs.append(df)
+
+        if previous_df is not None:
+            # Merge current and previous data on trade_id to calculate daily pnl
+            merged_df = pd.merge(df, previous_df, on='trade_id', suffixes=('', '_prev'))
+            merged_df['daily_pnl'] = (merged_df['premium'] - merged_df['premium_prev']) * merged_df['quantity'] * 100
+            dfs.append(merged_df)
+        else:
+            # For the first entry, set daily pnl as NaN or 0
+            df['daily_pnl'] = np.nan
+            dfs.append(df)
+
+        previous_df = df  # Update the previous DataFrame to the current one
 
     histo_risk_df = pd.concat(dfs, ignore_index=True)
 
+    # Drop unnecessary columns from the merge
+    histo_risk_df = histo_risk_df.drop(columns=[col for col in histo_risk_df if col.endswith('_prev')])
+
     return histo_risk_df
+
 
 
 
