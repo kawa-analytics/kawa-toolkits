@@ -38,8 +38,6 @@ def generate_market_data():
                 'Date': 'date',
                 'Close': 'price'}, inplace=True)
 
-            # R
-
             for _, row in stock_data.iterrows():
                 data.append({
                     'date': row['date'].date(),
