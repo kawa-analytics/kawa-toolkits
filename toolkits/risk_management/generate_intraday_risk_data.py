@@ -12,13 +12,15 @@ logger = logging.getLogger('script-logger')
 
 @kawa_tool(
     inputs={
-        # Position data
         'trade_id': str,
-        'stock': str,
-        'quantity': float,
-        # Stress scenario
         'price_increase_percent': float,
         'vol_increase_percent': float,
+        'stock': str,
+        'strike_price': float,
+        'expiration_date': date,
+        'quantity': float,
+        'direction': str,
+        'option_type': str,
     },
     outputs={
         'daily_pnl': float,
