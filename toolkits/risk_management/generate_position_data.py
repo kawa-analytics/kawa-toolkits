@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from scipy.stats import norm
 from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_NAMES
 
@@ -32,7 +32,7 @@ In the portfolio sheet:
         'trader': str,
         'option_type': str,
         'strike_price': float,
-        'expiration_date': datetime,
+        'expiration_date': date,
         'quantity': float,
         'direction': str,
         'notional': float,
