@@ -76,13 +76,10 @@ def generate_intraday_risk_data(df, kawa):
 
     for _, position in position_data.iterrows():
         # Load position fields
-        print(position)
         r = 0.01
         stock = position['stock']
         quantity = position['quantity']
         trade_id = position['trade_id']
-
-
         print(f'$$$ Working on stock={stock} and trade={trade_id}. ')
 
         current_market_data_row = intraday_market_data[intraday_market_data['stock'] == stock]
