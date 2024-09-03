@@ -22,6 +22,11 @@ logger = logging.getLogger('script-logger')
         'direction': str,
         'notional': float,
         'premium': float,
+        'delta': float,
+        'gamma': float,
+        'vega': float,
+        'theta': float,
+        'rho': float,
     },
 )
 def generate_position_data():
@@ -60,6 +65,12 @@ def generate_position_data():
             r=risk_free_rate, sigma=implied_volatility, option_type=option_type
         )
 
+        # Calculate the Greeks using Black-Scholes model
+        greeks = calculate_greeks(
+            S=stock_price, K=strike_price, T=time_to_expiration,
+            r=risk_free_rate, sigma=implied_volatility, option_type=option_type
+        )
+
         # Calculate notional value based on strike price and quantity
         notional_value = strike_price * quantity * 100  # 100 shares per option contract
 
@@ -72,11 +83,46 @@ def generate_position_data():
             'quantity': quantity,
             'direction': direction,
             'premium': premium,
-            'notional': notional_value
+            'notional': notional_value,
+            'delta': greeks['delta'],
+            'gamma': greeks['gamma'],
+            'vega': greeks['vega'],
+            'theta': greeks['theta'],
+            'rho': greeks['rho'],
         })
 
     position_data = pd.DataFrame(positions)
     return position_data
+
+
+def calculate_greeks(S, K, T, r, sigma, option_type):
+    """
+    Calculate the Black-Scholes Greeks for an option.
+
+    :param S: Current stock price
+    :param K: Strike price
+    :param T: Time to expiration in years
+    :param r: Risk-free interest rate
+    :param sigma: Volatility of the underlying stock
+    :param option_type: 'call' or 'put'
+    :return: Dictionary with delta, gamma, vega, theta, and rho
+    """
+    d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+    d2 = d1 - sigma * np.sqrt(T)
+
+    if option_type == 'call':
+        delta = norm.cdf(d1)
+        theta = -(S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T)) - r * K * np.exp(-r * T) * norm.cdf(d2)
+        rho = K * T * np.exp(-r * T) * norm.cdf(d2)
+    else:  # put option
+        delta = -norm.cdf(-d1)
+        theta = -(S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T)) + r * K * np.exp(-r * T) * norm.cdf(-d2)
+        rho = -K * T * np.exp(-r * T) * norm.cdf(-d2)
+
+    gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
+    vega = S * norm.pdf(d1) * np.sqrt(T) / 100  # Vega is often expressed per 1% change in volatility
+
+    return {'delta': delta, 'gamma': gamma, 'vega': vega, 'theta': theta, 'rho': rho}
 
 
 def calculate_option_premium(S, K, T, r, sigma, option_type):
