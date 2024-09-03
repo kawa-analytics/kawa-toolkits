@@ -46,6 +46,28 @@ def generate_intraday_risk_data(df, kawa):
         target_date=today,
     )
 
+    # D-1 market and greeks data
+    historical_market_data = (kawa
+                              .sheet(sheet_name='Market Data')
+                              .select(K.cols())
+                              .no_limit()
+                              .compute())
+
+    historical_greeks_data = (kawa
+                              .sheet(sheet_name='Histo Risk Data')
+                              .select(K.cols())
+                              .no_limit()
+                              .compute())
+
+    unique_dates = historical_market_data[['date']].drop_duplicates()
+    unique_dates_sorted = unique_dates.sort_values(by='date', ascending=False)
+    recent_dates = unique_dates_sorted['date'].head(5)
+    most_recent_date = max(recent_dates)
+
+    latest_historical_data_row = historical_market_data[historical_market_data['date'] == most_recent_date]
+    latest_greeks_data_row = historical_greeks_data[
+        historical_greeks_data['risk_computation_date'] == most_recent_date]
+
     for _, position in position_data.iterrows():
         # Load position fields
         r = 0.01
@@ -55,28 +77,6 @@ def generate_intraday_risk_data(df, kawa):
 
         current_market_data_row = intraday_market_data[intraday_market_data['stock'] == stock]
         current_greeks_row = intraday_risk_data[intraday_risk_data['trade_id'] == trade_id]
-
-        # D-1 market and greeks data
-        historical_market_data = (kawa
-                                  .sheet(sheet_name='Market Data')
-                                  .select(K.cols())
-                                  .no_limit()
-                                  .compute())
-
-        historical_greeks_data = (kawa
-                                  .sheet(sheet_name='Histo Risk Data')
-                                  .select(K.cols())
-                                  .no_limit()
-                                  .compute())
-
-        unique_dates = historical_market_data[['date']].drop_duplicates()
-        unique_dates_sorted = unique_dates.sort_values(by='date', ascending=False)
-        recent_dates = unique_dates_sorted['date'].head(5)
-        most_recent_date = max(recent_dates)
-
-        latest_historical_data_row = historical_market_data[historical_market_data['date'] == most_recent_date]
-        latest_greeks_data_row = historical_greeks_data[
-            historical_greeks_data['risk_computation_date'] == most_recent_date]
 
         historical_market_data_row = latest_historical_data_row[latest_historical_data_row['stock'] == stock]
         historical_greeks_row = latest_greeks_data_row[latest_greeks_data_row['trade_id'] == trade_id]
