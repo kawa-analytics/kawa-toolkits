@@ -55,7 +55,7 @@ def generate_historical_risk_data(kawa):
         logger.info(f'Result:  {df}')
 
         # Calculate realized P&L for each trade
-        df = pd.merge(df, position_data[['trade_id', 'initial_premium', 'quantity', 'direction']], on='trade_id')
+        df = pd.merge(df, position_data[['trade_id', 'initial_premium']], on='trade_id')
 
         logger.info('------')
         logger.info('ALL COLUMNS NOW:')
