@@ -39,7 +39,7 @@ def compute_premiums_and_greeks_on_date(position_data, market_data, target_date)
         if not market_row.empty:
             stock_price = market_row['price'].values[0]
             implied_volatility = market_row['volatility'].values[0]
-            time_to_expiration = (expiration_date.date() - target_date).days / 365
+            time_to_expiration = (expiration_date - target_date).days / 365
 
             # Calculate option premium and Greeks
             greeks = calculate_option_premium_and_greeks(
