@@ -41,12 +41,13 @@ def generate_historical_risk_data(kawa):
                      .compute())
 
     unique_dates = market_data[['date']].drop_duplicates()
-    unique_dates_sorted = unique_dates.sort_values(by='date', ascending=False)  # Sort dates in ascending order
-    recent_dates = unique_dates_sorted['date'].head(100)  # Adjusted to fetch 100 dates if necessary
+    unique_dates_sorted = unique_dates.sort_values(by='date', ascending=False)  # Sort dates in descending order
+    recent_dates = unique_dates_sorted['date'].head(100)  # Get the 100 most recent dates
+    recent_dates_sorted = recent_dates.sort_values(ascending=True)  # Sort these dates in ascending order for processing
     dfs = []
 
     previous_df = None
-    for d in reversed(recent_dates):
+    for d in recent_dates_sorted:
         logger.info(f'Work on {d}')
         df = compute_premiums_and_greeks_on_date(position_data, market_data, target_date=d)
         df = df.sort_values(by='trade_id').reset_index(drop=True)
@@ -70,7 +71,6 @@ def generate_historical_risk_data(kawa):
     histo_risk_df = histo_risk_df.drop(columns=[col for col in histo_risk_df if col.endswith('_prev')])
 
     return histo_risk_df
-
 
 
 
