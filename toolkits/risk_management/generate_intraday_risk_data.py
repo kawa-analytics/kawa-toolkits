@@ -76,6 +76,8 @@ def generate_intraday_risk_data(df, kawa):
         historical_greeks_data['risk_computation_date'] == most_recent_date]
 
     for _, position in position_data.iterrows():
+
+        logger.info('====='*50)
         # Load position fields
         r = 0.01
         stock = position['stock']
@@ -122,6 +124,9 @@ def generate_intraday_risk_data(df, kawa):
                 'price D-1': hist_price,
                 'price D': curr_price,
             })
+
+        else:
+            logger.info('+++++' * 50)
 
     pnl_df = pd.DataFrame(pnl_results)
 
