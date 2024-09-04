@@ -31,13 +31,13 @@ logger = logging.getLogger('script-logger')
         'vega_pnl': float,
         'theta_pnl': float,
         'rho_pnl': float,
+        'computation_date_time': datetime,
     },
 )
 def generate_intraday_risk_data(df, kawa):
     today = datetime.today().date()
     pnl_results = []
     position_data = df
-
 
     price_increase_percent = position_data.iloc[0]['price_increase_percent']
     vol_increase_percent = position_data.iloc[0]['vol_increase_percent']
@@ -122,6 +122,7 @@ def generate_intraday_risk_data(df, kawa):
                 'rho_pnl': rho_pnl,
                 'price D-1': hist_price,
                 'price D': curr_price,
+                'computation_date_time': datetime.utcnow()
             })
 
         else:
@@ -131,14 +132,6 @@ def generate_intraday_risk_data(df, kawa):
             logger.info(f'4: {current_greeks_row}')
 
     pnl_df = pd.DataFrame(pnl_results)
-
-    logger.info('--'*30)
-    logger.info(f'>>>>>>>>>>> Input df: {df}')
-    logger.info(list(df.columns))
-
-    logger.info(f'>>>>>>>>>>> New df: {pnl_df}')
-    logger.info(list(pnl_df.columns))
-    logger.info('--' * 30)
 
     df_with_pnl = pd.merge(df, pnl_df, on='trade_id', how='left')
 
