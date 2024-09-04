@@ -77,7 +77,6 @@ def generate_intraday_risk_data(df, kawa):
 
     for _, position in position_data.iterrows():
 
-        logger.info('====='*50)
         # Load position fields
         r = 0.01
         stock = position['stock']
@@ -126,7 +125,10 @@ def generate_intraday_risk_data(df, kawa):
             })
 
         else:
-            logger.info('+++++' * 50)
+            logger.info(f'1: {historical_market_data_row}')
+            logger.info(f'2: {current_market_data_row}')
+            logger.info(f'3: {historical_greeks_row}')
+            logger.info(f'4: {current_greeks_row}')
 
     pnl_df = pd.DataFrame(pnl_results)
 
