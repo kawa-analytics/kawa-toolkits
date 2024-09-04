@@ -38,7 +38,6 @@ def generate_intraday_risk_data(df, kawa):
     pnl_results = []
     position_data = df
 
-    logger.info(f'>>>>>>>>>>> Input df: {df}')
 
     price_increase_percent = position_data.iloc[0]['price_increase_percent']
     vol_increase_percent = position_data.iloc[0]['vol_increase_percent']
@@ -125,6 +124,15 @@ def generate_intraday_risk_data(df, kawa):
             })
 
     pnl_df = pd.DataFrame(pnl_results)
+
+    logger.info('--'*30)
+    logger.info(f'>>>>>>>>>>> Input df: {df}')
+    logger.info(list(df.columns))
+
+    logger.info(f'>>>>>>>>>>> New df: {pnl_df}')
+    logger.info(list(pnl_df.columns))
+    logger.info('--' * 30)
+
     df_with_pnl = pd.merge(df, pnl_df, on='trade_id', how='left')
 
     return df_with_pnl
