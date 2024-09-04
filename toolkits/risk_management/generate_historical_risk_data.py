@@ -49,18 +49,11 @@ def generate_historical_risk_data(kawa):
 
     previous_df = None
     for d in recent_dates_sorted:
-        logger.info(f'&&&&&&& Work on {d} &&&&&&&&&')
         df = compute_premiums_and_greeks_on_date(position_data, market_data, target_date=d)
         df = df.sort_values(by='trade_id').reset_index(drop=True)
-        logger.info(f'Result:  {df}')
 
         # Calculate realized P&L for each trade
         df = pd.merge(df, position_data[['trade_id', 'initial_premium']], on='trade_id')
-
-        logger.info('------')
-        logger.info('ALL COLUMNS NOW:')
-        logger.info(list(df.columns))
-        logger.info('------')
 
         df['realized_pnl'] = df.apply(
             lambda row: (row['premium'] - row['initial_premium']) * row['quantity'] * 100
