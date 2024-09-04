@@ -38,6 +38,8 @@ def generate_intraday_risk_data(df, kawa):
     pnl_results = []
     position_data = df
 
+    logger.info(f'>>>>>>>>>>> Input df: {df}')
+
     price_increase_percent = position_data.iloc[0]['price_increase_percent']
     vol_increase_percent = position_data.iloc[0]['vol_increase_percent']
     print(f'Stressed: price={price_increase_percent} vol={vol_increase_percent}')
