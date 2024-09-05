@@ -32,6 +32,8 @@ logger = logging.getLogger('script-logger')
         'theta_pnl': float,
         'rho_pnl': float,
         'computation_date_time': datetime,
+        'current_price': float,
+        'current_premium': float,
     },
 )
 def generate_intraday_risk_data(df, kawa):
@@ -122,6 +124,8 @@ def generate_intraday_risk_data(df, kawa):
                 'rho_pnl': rho_pnl,
                 'price D-1': hist_price,
                 'price D': curr_price,
+                'current_price': curr_price,
+                'current_premium': greeks_cur['premium'],
                 'computation_date_time': datetime.utcnow()
             })
 
