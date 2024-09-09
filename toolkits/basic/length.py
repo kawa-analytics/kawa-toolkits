@@ -11,6 +11,7 @@ logger = logging.getLogger('script-logger')
         'length': float, 
         'test':float, 
         'test2': float, 
+        'test3': float,
     },
 )
 def main(df: pd.DataFrame) -> pd.DataFrame:
@@ -19,4 +20,5 @@ def main(df: pd.DataFrame) -> pd.DataFrame:
     df['length'] = df['text'].apply(lambda x: len(x))
     df['test'] = df['text'].apply(lambda x: len(x))
     df['test2'] = df['text'].apply(lambda x: len(x))
+    df['test3'] = df['text'].apply(lambda x: len(x))
     return df
