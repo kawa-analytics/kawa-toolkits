@@ -7,11 +7,16 @@ logger = logging.getLogger('script-logger')
 
 @kawa_tool(
     inputs={'text': str},
-    outputs={'length': float, 'test':float },
+    outputs={
+        'length': float, 
+        'test':float, 
+        'test2': float, 
+    },
 )
 def main(df: pd.DataFrame) -> pd.DataFrame:
     logger.info('Starting the execution now')
     logger.info(df)
     df['length'] = df['text'].apply(lambda x: len(x))
     df['test'] = df['text'].apply(lambda x: len(x))
+    df['test2'] = df['text'].apply(lambda x: len(x))
     return df
