@@ -30,9 +30,9 @@ def detect_anomalies(df: pd.DataFrame) -> pd.DataFrame:
     start_time = time()
     for client_id, group in df.groupby('client_id'):
         logger.info(f'Now working in client={client_id}')
-        #df.loc[group.index, 'is_point_anomaly'] = detect_point_anomalies(group)
+        df.loc[group.index, 'is_point_anomaly'] = detect_point_anomalies(group)
         df.loc[group.index, 'is_behavioral_anomaly'] = detect_behavioral_anomalies(group)
-        #df.loc[group.index, 'is_spatial_anomaly'] = detect_spatial_anomalies(group)
+        df.loc[group.index, 'is_spatial_anomaly'] = detect_spatial_anomalies(group)
 
     end_time = time()
     seconds_elapsed = end_time - start_time
