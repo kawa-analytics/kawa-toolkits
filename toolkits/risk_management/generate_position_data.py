@@ -12,19 +12,6 @@ from toolkits.risk_management.risk_management_common import STOCK_NAMES, TRADER_
 
 logger = logging.getLogger('script-logger')
 
-"""
-1) Portfolio = position
-2) Market data
-3) Risk Histo -> premium + greeks
-4) Intraday Risk ->  premium + greeks (computed with current market data) - Introduce variations
-
-In the portfolio sheet:
-1) Computed PnL (premium(intraday) - premium(latest in risk histo))
-2) Risk Based PnL (Black-Scholes model with price and vol)
-
-
-"""
-
 
 @kawa_tool(
     inputs={},
@@ -40,9 +27,11 @@ In the portfolio sheet:
         'notional': float,
         'trade_date': date,
         'initial_premium': float,
+        'portfolio': str,
     },
 )
 def generate_position_data():
+    portfolios = ['OptionX Capital', 'StrikePoint Strategies', 'GammaEdge Investments']
     stock_data = {}
 
     for stock in STOCK_NAMES:
@@ -74,6 +63,7 @@ def generate_position_data():
         stock_price = stock_data[stock]['price']
         option_type = np.random.choice(option_types)
         direction = np.random.choice(directions)
+        portfolio = np.random.choice(portfolios)
         strike_price = np.round(stock_price * np.random.uniform(0.7, 0.9),
                                 2)  # Strike price within 20% of current price
         time_to_expiration = np.random.randint(30, 365) / 365  # Time to expiration in years
@@ -94,6 +84,7 @@ def generate_position_data():
             option_type=option_type
         )
 
+    
         trade_id = str(uuid.uuid4())
         positions.append({
             'trade_id': trade_id,
@@ -106,7 +97,8 @@ def generate_position_data():
             'direction': direction,
             'notional': notional_value,
             'trade_date': trade_date,
-            'initial_premium': initial_premium['premium']
+            'initial_premium': initial_premium['premium'],
+            'portfolio': portfolio,
         })
 
     position_data = pd.DataFrame(positions)
