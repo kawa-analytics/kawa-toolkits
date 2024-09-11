@@ -8,6 +8,7 @@ from slack_sdk import WebClient
     secrets={'channel': 'slack_channel', 'token': 'slack_token', },
 )
 def execute(df: pd.DataFrame, channel: str, token: str) -> pd.DataFrame:
+    print(f'CHANNEL:{channel} TOKEN:{token} ---')
     num_rows = len(df)
     table = df.head(20).to_markdown()
     note = f'(Showing 20 rows out of {num_rows})' if num_rows > 20 else ''
