@@ -2,3 +2,5 @@ name: demo
 tools:
   - name: Publish Discounts
     file: update_wayne_website.py
+  - name: Compute Reorder point
+    file: reorder_point.py
