@@ -1,12 +1,13 @@
 import logging
 import pandas as pd
+import datetime
 from kywy.client.kawa_decorators import kawa_tool
 
 logger = logging.getLogger('script-logger')
 
 
 @kawa_tool(
-    inputs={'units_sold': float, 'transaction_date': date, 'product_leadtime': float, 'product_name': str},
+    inputs={'units_sold': float, 'transaction_date': datetime.date, 'product_leadtime': float, 'product_name': str},
     outputs={'Reorder Point': float}
 )
 def compute_reorder_point(df):
