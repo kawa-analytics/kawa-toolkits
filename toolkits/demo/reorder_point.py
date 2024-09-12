@@ -25,6 +25,6 @@ def compute_reorder_point(df):
     # Compute the total days between min and max transaction date per product
     df_merged['total_days'] = df_merged.apply(lambda row: (row['max_date'] - row['min_date']).days, axis=1)
     
-    df['Average Daily Usage'] = df['total_sold'] / df['total_days']
-    df['Reorder Point'] = (df['Average Daily Usage'] * df['product_leadtime']) + safety_stock
-    return df
+    df_merged['Average Daily Usage'] = df_merged['total_sold'] / df_merged['total_days']
+    df_merged['Reorder Point'] = (df_merged['Average Daily Usage'] * df_merged['product_leadtime']) + safety_stock
+    return df_merged
