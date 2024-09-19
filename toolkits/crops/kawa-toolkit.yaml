@@ -1,0 +1,4 @@
+name: crops
+tools:
+  - name: Cluster Crops
+    file: clustering_crops.py
