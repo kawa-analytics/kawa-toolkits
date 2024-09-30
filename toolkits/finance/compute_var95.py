@@ -12,7 +12,8 @@ logger = logging.getLogger('script-logger')
     outputs={'var95': float},
 )
 def calculate_var_95(df):
-
+    logger.info('INPUT')
+    logger.info(df)
     df = df.sort_values(by='date')
     df['return'] = df.groupby('stock')['price'].pct_change()
     df = df.dropna(subset=['return'])
@@ -21,6 +22,7 @@ def calculate_var_95(df):
     var_95.columns = ['stock', 'var95']
 
     df = df.merge(var_95, on='stock', how='left')
+    logger.info('OUTPUT')
     logger.info(df)
     df = df.drop(columns=['return'])
 
