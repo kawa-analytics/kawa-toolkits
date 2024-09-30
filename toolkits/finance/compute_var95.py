@@ -21,6 +21,7 @@ def calculate_var_95(df):
     var_95.columns = ['stock', 'var95']
 
     df = df.merge(var_95, on='stock', how='left')
+    logger.info(df)
     df = df.drop(columns=['return'])
 
     return df
