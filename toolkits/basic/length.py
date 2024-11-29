@@ -12,6 +12,7 @@ logger = logging.getLogger('script-logger')
 def main(df: pd.DataFrame) -> pd.DataFrame:
     logger.info('Starting the execution now')
     logger.info(df)
+    
     df['length'] = df['text'].apply(lambda x: len(x))
     df['length2'] = df['text'].apply(lambda x: len(x))
     df['length3'] = df['text'].apply(lambda x: len(x))
