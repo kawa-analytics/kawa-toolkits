@@ -48,23 +48,24 @@ def your_function():
     ...
 ```
 
-The decorator can take several parameters:
+The decorator has several attributes:
 - inputs
 - outputs
 - secrets
+- parameters
 
 Please look at the script below for reference:
 ```python
 from kywy.client.kawa_decorators import kawa_tool
 import pandas as pd
 
-
 @kawa_tool(
     inputs={'name': str},
     outputs={'gender': str},
     secrets={'open_ai_key': 'OPEN_AI_KEY'},
+    parameters={'threshold': {'type': float, 'default': 1.0}},
 )
-def execute(df: pd.DataFrame, open_ai_key: str) -> pd.DataFrame:
+def execute(df: pd.DataFrame, threshold: float, open_ai_key: str) -> pd.DataFrame:
     open_ai_client = get_open_ai_client(open_ai_key)
     df['gender'] = df['name'].apply(lambda x: guess_gender(open_ai_client, x))
     return df
@@ -80,7 +81,7 @@ def guess_gender(open_ai_client, name: str):
     
 #### i. Inputs
 
-Inputs determine what columns will the input dataframe of 
+Inputs determine what columns the input dataframe of 
 your decorated function will receive.
 In the above example, the `execute` function will get a dataframe with the column
 `name` which will be a string (`str`).
@@ -96,7 +97,6 @@ For inputs, the following types are supported:
 The dataframe usually has additional columns than just the inputs. 
 Those will be the primary keys of the sheet or the view you are working on.
 
-
 #### ii. Outputs
 
 Similarly to Inputs, Outputs will determine the columns of your output dataframe.
@@ -110,12 +110,64 @@ original one).
 
 Outputs support the same types as inputs.
 
-
 #### iii. Secrets
 
 Secrets will be declared in KAWA and stored as encrypted texts.
 In the above example, KAWA will have a secret called `OPEN_AI_KEY`.
 It will be made available in the script as `open_ai_key`.
+
+#### iv. Parameters (Available from v1.28)
+
+Parameters will be set at runtime by users.
+You can declare a list of parameters in the `@kawa_tool` decorator.
+For each one, specify its name, its type (Same type as the @input) and a default value.
+
+Here is a sample of code to illustrate all available types of parameters:
+
+```python
+parameters={
+                'decimal_param': {
+                    'type':float, 
+                    'default': 1.0
+                },
+                'date_param': {
+                    'type':datetime.date, 
+                    # Default value for date should be 
+                    # a string in the ISO format
+                    'default': '2020-01-01'
+                }, 
+                'datetime_param': {
+                    'type':datetime.datetime, 
+                     # Default value for date time should be 
+                     # a string in the ISO format
+                    'default': '2000-01-01T01:30:00.000-05:00'
+                },
+                'boolean_param': {
+                    'type':bool, 
+                    'default': True
+                },
+                'text_param': {
+                    'type':str, 
+                    'default': 'default'
+                }
+    }
+```
+
+All parameters declared in the decorators should be passed as argument to the main function.
+
+For example:
+
+```python
+@kawa_tool(...)
+def main(df: pd.DataFrame, 
+         decimal_param: float, 
+         date_param: datetime.date,
+         datetime_param: datetime.datetime, 
+         boolean_param: bool, 
+         text_param: str
+):
+    ...
+```
 
 
 ## 2.b Kawa toolkits
@@ -125,7 +177,7 @@ path to the associated scripts.
 The toolkit files must be called: `kawa-toolkit.yaml`. (The name is important)
 
 Here is an example of a valid toolkit. It points to a script called `gender.py`.
-It will be displayed in Kawa Gui with the name *Guess gender from first name*.
+It will be displayed in Kawa Gui with the name *Guess gender from the  first name*.
 
 ```yaml
 name: ai-tools
