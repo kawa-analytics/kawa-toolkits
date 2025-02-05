@@ -13,7 +13,7 @@ To access public repositories, make sure to set this scope: `public_repo`
 
 ### 1.b Set up the connection between KAWA and GitHub
 
-From KAWA, click on the settings icon (cog) at the bottom right of your screen.
+From KAWA, click on the settings icon (cog) at the bottom left of your screen.
 Then click on `Source Control`.
 There, you can fill the following values:
 
