@@ -63,7 +63,10 @@ import pandas as pd
     inputs={'name': str},
     outputs={'gender': str},
     secrets={'open_ai_key': 'OPEN_AI_KEY'},
-    parameters={'threshold': {'type': float, 'default': 1.0}},
+    parameters={
+        'threshold': {'type': float, 'default': 1.0},
+        'satus': {'type': str, 'default': 'PENDING', 'values': ['PENDING','DONE', 'ERROR']}
+    },
 )
 def execute(df: pd.DataFrame, threshold: float, open_ai_key: str) -> pd.DataFrame:
     open_ai_client = get_open_ai_client(open_ai_key)
