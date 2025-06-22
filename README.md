@@ -68,7 +68,7 @@ import pandas as pd
         'satus': {'type': str, 'default': 'PENDING', 'values': ['PENDING','DONE', 'ERROR']}
     },
 )
-def execute(df: pd.DataFrame, threshold: float, open_ai_key: str) -> pd.DataFrame:
+def execute(df: pd.DataFrame, threshold: float, status:str, open_ai_key: str) -> pd.DataFrame:
     open_ai_client = get_open_ai_client(open_ai_key)
     df['gender'] = df['name'].apply(lambda x: guess_gender(open_ai_client, x))
     return df
@@ -124,6 +124,7 @@ It will be made available in the script as `open_ai_key`.
 Parameters will be set at runtime by users.
 You can declare a list of parameters in the `@kawa_tool` decorator.
 For each one, specify its name, its type (Same type as the @input) and a default value.
+You can define a list of possible value for text parameters.
 
 Here is a sample of code to illustrate all available types of parameters:
 
@@ -152,6 +153,11 @@ parameters={
                 'text_param': {
                     'type':str, 
                     'default': 'default'
+                },
+                'text_param_with_values': {
+                    'type':str, 
+                    'default': 'default',
+                    'values': ['OK','KO'],
                 }
     }
 ```
@@ -167,7 +173,8 @@ def main(df: pd.DataFrame,
          date_param: datetime.date,
          datetime_param: datetime.datetime, 
          boolean_param: bool, 
-         text_param: str
+         text_param: str,
+         text_param_with_values: str,
 ):
     ...
 ```
