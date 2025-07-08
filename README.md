@@ -158,11 +158,16 @@ parameters={
                     'type':str, 
                     'default': 'default',
                     'values': ['OK','KO'],
-                }
+                },
+                'user_file': {
+                    'extensions':['csv', 'xlsx'],
+                },
     }
 ```
 
 All parameters declared in the decorators should be passed as argument to the main function.
+If a parameter has a non empty `extensions` array, it will be treated as a file. The `user_file` argument that is injected in the function will be the path
+to the uploaded file.
 
 For example:
 
@@ -175,6 +180,7 @@ def main(df: pd.DataFrame,
          boolean_param: bool, 
          text_param: str,
          text_param_with_values: str,
+         user_file: str
 ):
     ...
 ```
