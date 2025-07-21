@@ -11,12 +11,15 @@ import unittest
 )
 def execute(df: pd.DataFrame, window) -> pd.DataFrame:
     df = df.sort_values(['dimension', 'date'])
-    df['sliding_average'] = (df.groupby('dimension')['measure']
-                             .rolling(window=window)
-                             .mean()
-                             .reset_index(level=0, drop=True))
-
-    df.fillna(0, inplace=True)
+    
+    df['sliding_average'] = (df
+        .groupby('dimension')['measure']
+        .rolling(window=window)
+        .mean()
+        .reset_index(level=0, drop=True)
+        .fillna(0)
+    )
+    
     return df
 
 
