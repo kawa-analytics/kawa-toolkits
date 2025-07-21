@@ -21,22 +21,39 @@ def execute(df: pd.DataFrame, window) -> pd.DataFrame:
 
 
 class TestSlidingAverage(unittest.TestCase):
-    def test_area(self):
-        num = 10
+    def test_with_window_greater_than_one(self):
+        # given
         window = 4
-        df = execute(
-            df=pd.DataFrame({
-                'date': [date(2025, 1, i) for i in range(1, num)],
-                'measure': range(1, num),
-                'dimension': [f'd{i%2}' for i in range(1, num)],
-            }),
-            window=window
-        )
 
+        # when
+        df = execute(df=self.gen_test_data(), window=window)
+
+        # then
         self.assertEqual(
             first=df['sliding_average'].tolist(),
             second=[0, 0, 0, 5, 0, 0, 0, 4, 6],
         )
+
+    def test_with_window_equals_to_one(self):
+        # given
+        window = 1
+
+        # when
+        df = execute(df=self.gen_test_data(), window=window)
+
+        # then
+        self.assertEqual(
+            first=df['sliding_average'].tolist(),
+            second=[2, 4, 6, 8, 1, 3, 5, 7, 9],
+        )
+
+    @staticmethod
+    def gen_test_data():
+        return pd.DataFrame({
+            'date': [date(2025, 1, i) for i in range(1, 10)],
+            'measure': range(1, 10),
+            'dimension': [f'd{i%2}' for i in range(1, 10)],
+        })
 
 
 if __name__ == '__main__':
