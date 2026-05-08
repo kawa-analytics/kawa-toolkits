@@ -4,3 +4,5 @@ tools:
     file: update_wayne_website.py
   - name: Compute Reorder point
     file: reorder_point.py
+  - name: foo
+    file: foo.py
